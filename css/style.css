@@ -1,0 +1,116 @@
+.container {
+	width: 70%;
+	margin: 0 auto;
+}
+.title {
+	text-align: center;
+}
+#app {
+	margin: 0 auto;
+	border: 3px solid black;
+	width: 50%;
+	padding: 1em;
+	text-align: center;
+	overflow: hidden;
+}
+.input-block {
+	padding: 10px;
+}
+.priority-block {
+	padding: 10px;
+}
+.task-text {
+	width: 95%;
+}
+.priority {
+	width: 95%;
+}
+.add-task_button {
+	animation-duration: 3s;
+	animation-iteration-count: infinite;
+	animation-name: hoverbutton;
+	transition: 0.2s;
+	width: 70%;
+	border: 2px solid black;
+	background-color: #fff;
+}
+@keyframes hoverbutton {
+	0% {
+		border: 2px solid #2A0537;
+	}
+	30% {
+		border: 2px solid #37051F;
+	}
+	55% {
+		border: 2px solid #8B232C;
+	}
+	75% {
+		border: 2px solid #8B5023;
+	}
+	100% {
+		border: 2px solid #1A0F07;
+	}
+}
+.add-task_button:hover {
+	animation-iteration-count: infinite;
+	animation-name: hoverbutton;
+}
+.add-task_button:active {
+	transform: scale(0.95);
+}
+ul {
+	list-style: none;
+	margin: 5px;
+	padding: 5px;
+}
+li {
+	animation-duration: 0.3s;
+	animation-name: slide;
+	transition: 0.3s;
+	margin-top: 5px;
+}
+.task-container { 
+	width: 95%;
+}
+@keyframes slide {
+	0% {
+		transform: translateX(100%);
+		opacity: 0;
+	}
+	100% {
+		transform: translateX(0%);
+		opacity: 1;
+	}
+}
+.task {
+	border: 1px solid black;
+}
+.date {
+	font-size: 13px;
+}
+.status-line {
+	text-align: center;
+	padding: 5px;
+}
+.text {
+	padding: 5px;
+}
+.actions {
+	text-align: center;
+}
+.actions button {
+	transition: 0.2s;
+	margin: 5px;
+	border: 2px solid black;
+	background-color: #fff;
+	width: 50%;
+}
+.actions button:active {
+	transform: scale(0.95);
+}
+.sort-title {
+	margin: 15px 0;
+}
+
+
+

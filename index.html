@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>To-do List</title>
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;800&display=swap" rel="stylesheet">
+</head>
+<body>
+	<div class="container">
+		<h1 class="title">ТуДу Лист от Лёшки</h1>
+		<div id="app">
+			<form class="input-form">
+				<div class="input-block">
+					<label for="task-text">Запланируйте новую задачу</label>
+					<input type="text" name="task-text" id="task-text" class="task-text" maxlength="50" />
+				</div>
+				<div class="priority-block">
+					<label for="priority">Выберите приоритет задания</label>
+					<select name="priority" id="priority" class="priority">
+					<option>Подождёт до завтра</option>
+					<option>Пора бы начинать делать</option>
+					<option>Меня уже пиздят палками</option>
+					</select>
+				</div>
+				<button class="add-task_button">Добавить</button>
+			</form>
+			<div class="task-container">
+				<div class="actions">
+					<h2 class="sort-title">Сортировка</h2>
+					<button class="priority-sort">По приоритету</button>
+					<button class="date-sort">По дате</button>
+				</div>
+				<ul class="task-list">
+<!-- 					<li>
+						<div class="task">
+							<div class="status-line">
+								<span class="date">20.20.2020, 16:44:01</span>
+								<span class="status">Ещё ничего не сделано</span>
+							</div>
+							<div class="text">
+								Сделать уборку дома и закончить домашку!
+							</div>
+							<div class="actions">
+								<button class="finish-task">Завершить</button>
+							</div>
+						</div>
+					</li> -->
+				</ul>
+			</div>
+		</div>
+	</div>
+	<script>
+		let script = document.createElement("script");
+		script.src = "js/indexed.js";
+		document.head.append(script);;
+		script.onload = function() {
+			todo.setTasks()
+			todo.renderAll()
+		}
+	</script>
+</body>
+</html>
