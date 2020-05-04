@@ -96,7 +96,12 @@ const todo = (function() {
 					</li>`);
 		},
 		deleteTask(index) {
-			tasks = tasks.filter(task => task.date !== index);
+			// tasks = tasks.filter(task => task.date !== index);
+			let i;
+			tasks.forEach((element, index) => { if (element.date === index) {
+				i = index;
+			}});
+			tasks.splice(i, 1);
 			localStorage.removeItem(index)
 		},
 		prioritySort() {
@@ -134,12 +139,15 @@ const todo = (function() {
 
 taskList.addEventListener("click", (e) => {
 	if (e.target.dataset.index) {
-		e.target.parentElement.parentElement.parentElement.style.transform = "translateX(-200%)";
+		// e.target.parentElement.parentElement.parentElement.style.transform = "translateX(-200%)";
+		document.querySelector(`li[data-index=${CSS.escape(e.target.dataset.index)}]`).style.transform = "translateX(-200%)";
 		setTimeout(() => {
-			e.target.parentElement.parentElement.parentElement.remove();
+			// e.target.parentElement.parentElement.parentElement.remove();
+			document.querySelector(`li[data-index=${CSS.escape(e.target.dataset.index)}]`).remove()
+			todo.deleteTask(e.target.dataset.index);	
 		}, 300)
-		todo.deleteTask(e.target.dataset.index);
 	}
+	console.log(todo.getTasks())
 });
 
 // add task
@@ -154,6 +162,7 @@ addTaskButton.addEventListener("click", (e) => {
 		});
 		input.value = "";
 	}
+	console.log(todo.getTasks())
 });
 
 // add task "enter"
