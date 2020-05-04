@@ -8,6 +8,58 @@ const todo = (function () {
   const tasks = [];
   let toHigh = false;
   let toNew = false;
+
+// remove task
+
+taskList.addEventListener("click", (e) => {
+  if (e.target.dataset.index) {
+    const deletedElement = document.querySelector(
+      `li[data-index=${CSS.escape(e.target.dataset.index)}]`
+    );
+
+    deletedElement.style.transform = "translateX(-200%)";
+    setTimeout(() => {
+      deletedElement.remove();
+      todo.deleteTask(e.target.dataset.index);
+    }, 300);
+  }
+});
+
+// add task
+
+addTaskButton.addEventListener("click", (e) => {
+  e.preventDefault();
+  if (input.value.length > 0 && input.value.trim()) {
+    todo.addTask({
+      date: new Date().getTime(),
+      text: input.value,
+      priorityIndex: priority.selectedIndex + 1
+    });
+    input.value = "";
+  }
+});
+
+// add task "enter"
+
+input.addEventListener("keyup", (e) => {
+  if (e.keyCode === 13) {
+    addTaskButton.click();
+  }
+});
+
+// priority sort
+
+prioritySort.addEventListener("click", () => {
+  todo.prioritySort();
+});
+
+// date sort
+
+dateSort.addEventListener("click", () => {
+  todo.dateSort();
+});
+
+
   return {
     addTask({ date, text, priorityIndex }) {
       localStorage.setItem(
@@ -142,52 +194,5 @@ const todo = (function () {
 todo.setTasks();
 todo.renderAll();
 
-// remove task
 
-taskList.addEventListener("click", (e) => {
-  if (e.target.dataset.index) {
-    const deletedElement = document.querySelector(
-      `li[data-index=${CSS.escape(e.target.dataset.index)}]`
-    );
 
-    deletedElement.style.transform = "translateX(-200%)";
-    setTimeout(() => {
-      deletedElement.remove();
-      todo.deleteTask(e.target.dataset.index);
-    }, 300);
-  }
-});
-
-// add task
-
-addTaskButton.addEventListener("click", (e) => {
-  e.preventDefault();
-  if (input.value.length > 0 && input.value.trim()) {
-    todo.addTask({
-      date: new Date().getTime(),
-      text: input.value,
-      priorityIndex: priority.selectedIndex + 1
-    });
-    input.value = "";
-  }
-});
-
-// add task "enter"
-
-input.addEventListener("keyup", (e) => {
-  if (e.keyCode === 13) {
-    addTaskButton.click();
-  }
-});
-
-// priority sort
-
-prioritySort.addEventListener("click", () => {
-  todo.prioritySort();
-});
-
-// date sort
-
-dateSort.addEventListener("click", () => {
-  todo.dateSort();
-});
