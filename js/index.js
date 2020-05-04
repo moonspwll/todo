@@ -131,7 +131,8 @@ const todo = (function() {
 	}
 })();
 
-
+todo.setTasks();
+todo.renderAll();
 
 
 // remove task
