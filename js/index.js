@@ -51,9 +51,9 @@ const todo = (function() {
 		setTasks() {
 			for (let key in localStorage) {
 				if (!localStorage.hasOwnProperty(key)) {
-					continue
+					continue;
 				}
-				tasks.push(JSON.parse(localStorage.getItem(key)))
+				tasks.push(JSON.parse(localStorage.getItem(key)));
 			}
 			tasks.sort((a, b) => {
 				return a.date - b.date;
@@ -76,7 +76,7 @@ const todo = (function() {
 							</div>
 						</div>
 					</li>`)
-			})
+			});
 		},
 		renderTask({date, text, priority}) {
 			taskList.insertAdjacentHTML("beforeend", 
@@ -101,7 +101,7 @@ const todo = (function() {
 				i = index;
 			}});
 			tasks.splice(i, 1);
-			localStorage.removeItem(index)
+			localStorage.removeItem(index);
 		},
 		prioritySort() {
 			taskList.innerHTML = "";
@@ -112,7 +112,7 @@ const todo = (function() {
 				tasks.sort((a, b) => b.priority - a.priority);
 				toHigh = true;
 			}
-			this.renderAll()
+			this.renderAll();
 		},
 		dateSort() {
 			taskList.innerHTML = "";
@@ -123,7 +123,7 @@ const todo = (function() {
 				tasks.sort((a, b) => b.date - a.date);
 				toNew = true;
 			}
-			this.renderAll()
+			this.renderAll();
 		},
 		getTasks() {
 			return tasks;
@@ -139,9 +139,11 @@ todo.renderAll();
 
 taskList.addEventListener("click", (e) => {
 	if (e.target.dataset.index) {
-		document.querySelector(`li[data-index=${CSS.escape(e.target.dataset.index)}]`).style.transform = "translateX(-200%)";
+		const deletedElement = document.querySelector(`li[data-index=${CSS.escape(e.target.dataset.index)}]`);
+		
+		deletedElement.style.transform = "translateX(-200%)";
 		setTimeout(() => {
-			document.querySelector(`li[data-index=${CSS.escape(e.target.dataset.index)}]`).remove()
+			deletedElement.remove();
 			todo.deleteTask(e.target.dataset.index);	
 		}, 300)
 	}
