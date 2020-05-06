@@ -9,56 +9,55 @@ const todo = (function () {
   let toHigh = false;
   let toNew = false;
 
-// remove task
+  // remove task
 
-taskList.addEventListener("click", (e) => {
-  if (e.target.dataset.index) {
-    const deletedElement = document.querySelector(
-      `li[data-index=${CSS.escape(e.target.dataset.index)}]`
-    );
+  taskList.addEventListener("click", (e) => {
+    if (e.target.dataset.index) {
+      const deletedElement = document.querySelector(
+        `li[data-index=${CSS.escape(e.target.dataset.index)}]`
+      );
 
-    deletedElement.style.transform = "translateX(-200%)";
-    setTimeout(() => {
-      deletedElement.remove();
-      todo.deleteTask(e.target.dataset.index);
-    }, 300);
-  }
-});
+      deletedElement.style.transform = "translateX(-200%)";
+      setTimeout(() => {
+        deletedElement.remove();
+        todo.deleteTask(e.target.dataset.index);
+      }, 300);
+    }
+  });
 
-// add task
+  // add task
 
-addTaskButton.addEventListener("click", (e) => {
-  e.preventDefault();
-  if (input.value.length > 0 && input.value.trim()) {
-    todo.addTask({
-      date: new Date().getTime(),
-      text: input.value,
-      priorityIndex: priority.selectedIndex + 1
-    });
-    input.value = "";
-  }
-});
+  addTaskButton.addEventListener("click", (e) => {
+    e.preventDefault();
+    if (input.value.length > 0 && input.value.trim()) {
+      todo.addTask({
+        date: new Date().getTime(),
+        text: input.value,
+        priorityIndex: priority.selectedIndex + 1,
+      });
+      input.value = "";
+    }
+  });
 
-// add task "enter"
+  // add task "enter"
 
-input.addEventListener("keyup", (e) => {
-  if (e.keyCode === 13) {
-    addTaskButton.click();
-  }
-});
+  input.addEventListener("keyup", (e) => {
+    if (e.keyCode === 13) {
+      addTaskButton.click();
+    }
+  });
 
-// priority sort
+  // priority sort
 
-prioritySort.addEventListener("click", () => {
-  todo.prioritySort();
-});
+  prioritySort.addEventListener("click", () => {
+    todo.prioritySort();
+  });
 
-// date sort
+  // date sort
 
-dateSort.addEventListener("click", () => {
-  todo.dateSort();
-});
-
+  dateSort.addEventListener("click", () => {
+    todo.dateSort();
+  });
 
   return {
     addTask({ date, text, priorityIndex }) {
@@ -67,18 +66,18 @@ dateSort.addEventListener("click", () => {
         JSON.stringify({
           date,
           text,
-          priority: priorityIndex
+          priority: priorityIndex,
         })
       );
       tasks.push({
         date,
         text,
-        priority: priorityIndex
+        priority: priorityIndex,
       });
       this.renderTask({
         date,
         text,
-        priority: priorityIndex
+        priority: priorityIndex,
       });
     },
     priorityName(index) {
@@ -86,17 +85,17 @@ dateSort.addEventListener("click", () => {
         case 1:
           return {
             text: "Подождёт до завтра",
-            color: "#09B378"
+            color: "#09B378",
           };
         case 2:
           return {
             text: "Пора бы начинать делать",
-            color: "#FB992E"
+            color: "#FB992E",
           };
         case 3:
           return {
             text: "Меня уже пиздят палками",
-            color: "#E56C6C"
+            color: "#E56C6C",
           };
       }
     },
@@ -187,12 +186,9 @@ dateSort.addEventListener("click", () => {
     },
     getTasks() {
       return tasks;
-    }
+    },
   };
 })();
 
 todo.setTasks();
 todo.renderAll();
-
-
-
