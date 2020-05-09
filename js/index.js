@@ -1,26 +1,55 @@
+const storage = (function () {
+    let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+    return {
+        serializedTasks() {
+            return JSON.stringify(tasks);
+        },
+        setToLocalStorage() {
+            localStorage.setItem("tasks", this.serializedTasks());
+        },
+        getTasks() {
+            return tasks;
+        },
+        newTask(task) {
+            if (task) {
+                tasks.push(task);
+                this.setToLocalStorage();
+            }
+        },
+        deleteTask(date) {
+            tasks = tasks.filter((task) => { 
+                return task.date !== date 
+            });
+            console.log(tasks)
+            this.setToLocalStorage();
+            // console.log(localStorage.tasks);
+        },
+    };
+})();
+
 const todo = (function () {
     const addTaskButton = document.querySelector(".add-task_button");
     const input = document.querySelector(".task-text");
-    const priority = document.querySelector(".priority");
+    const prioritySelect = document.querySelector(".priority");
     const taskList = document.querySelector(".task-list");
     const prioritySort = document.querySelector(".priority-sort");
     const dateSort = document.querySelector(".date-sort");
-    const tasks = [];
+    let tasks = storage.getTasks() || [];
     let toHigh = false;
     let toNew = false;
 
     // remove task
 
     taskList.addEventListener("click", (e) => {
-        if (e.target.dataset.index) {
+        if (e.target.dataset.date) {
             const deletedElement = document.querySelector(
-                `li[data-index=${CSS.escape(e.target.dataset.index)}]`
+                `li[data-date=${CSS.escape(e.target.dataset.date)}]`
             );
 
             deletedElement.style.transform = "translateX(-200%)";
             setTimeout(() => {
                 deletedElement.remove();
-                todo.deleteTask(e.target.dataset.index);
+                storage.deleteTask(e.target.dataset.date);
             }, 300);
         }
     });
@@ -33,7 +62,7 @@ const todo = (function () {
             todo.addTask({
                 date: new Date().getTime(),
                 text: input.value,
-                priorityIndex: priority.selectedIndex + 1,
+                priorityIndex: prioritySelect.selectedIndex + 1,
             });
             input.value = "";
         }
@@ -60,25 +89,9 @@ const todo = (function () {
     });
 
     return {
-        addTask({ date, text, priorityIndex }) {
-            localStorage.setItem(
-                date,
-                JSON.stringify({
-                    date,
-                    text,
-                    priority: priorityIndex,
-                })
-            );
-            tasks.push({
-                date,
-                text,
-                priority: priorityIndex,
-            });
-            this.renderTask({
-                date,
-                text,
-                priority: priorityIndex,
-            });
+        addTask(task) {
+            storage.newTask(task);
+            this.renderTask(task);
         },
         priorityName(index) {
             const PRIORITY_LOW = 1;
@@ -100,46 +113,17 @@ const todo = (function () {
             };
             return priorities[index] || priorities[PRIORITY_MID];
         },
-        setTasks() {
-            for (const key in localStorage) {
-                if (!localStorage.hasOwnProperty(key)) {
-                    continue;
-                }
-                tasks.push(JSON.parse(localStorage.getItem(key)));
-            }
-            tasks.sort((a, b) => a.date - b.date);
-        },
         renderAll() {
-            tasks.forEach(({ date, text, priority }) => {
-                taskList.insertAdjacentHTML(
-                    "beforeend",
-                    `<li data-index=${date} style="background-color: ${
-                        this.priorityName(priority).color
-                    }">
-                        <div class="task">
-                            <div class="status-line">
-                                <span class="date">${new Date(
-                                    date
-                                ).toLocaleString()}</span>
-                                <span class="status">${
-                                    this.priorityName(priority).text
-                                }</span>
-                            </div>
-                            <div class="text">
-                                ${text}
-                            </div>
-                            <div class="actions">
-                                <button class="finish-task" data-index=${date}>Завершить</button>
-                            </div>
-                        </div>
-                    </li>`
-                );
+            tasks.forEach((task) => {
+                return this.renderTask(task);
             });
         },
-        renderTask({ date, text, priority }) {
+        renderTask({ date, text, priorityIndex }) {
             taskList.insertAdjacentHTML(
                 "beforeend",
-                `<li data-index=${date} style="background-color: ${this.priorityName(priority).color}">
+                `<li data-date=${date} style="background-color: ${
+                    this.priorityName(priorityIndex).color
+                }">
 					<div class="task">
                         <div class="status-line">
                             <span class="date">"
@@ -153,7 +137,7 @@ const todo = (function () {
                             ${text}
                         </div>
                         <div class="actions">
-                            <button class="finish-task" data-index=${date}>Завершить</button>
+                            <button class="finish-task" data-date=${date}>Завершить</button>
                         </div>
                     </div>
 			    </li>`
@@ -197,5 +181,5 @@ const todo = (function () {
     };
 })();
 
-todo.setTasks();
+// todo.setTasks();
 todo.renderAll();
