@@ -29,7 +29,7 @@ const todo = (function () {
 
     addTaskButton.addEventListener("click", (e) => {
         e.preventDefault();
-        if (input.value.length > 0 && input.value.trim()) {
+        if (input.value.trim()) {
             todo.addTask({
                 date: new Date().getTime(),
                 text: input.value,
@@ -81,23 +81,24 @@ const todo = (function () {
             });
         },
         priorityName(index) {
-            switch (index) {
-                case 1:
-                    return {
-                        text: "Подождёт до завтра",
-                        color: "#09B378",
-                    };
-                case 2:
-                    return {
-                        text: "Пора бы начинать делать",
-                        color: "#FB992E",
-                    };
-                case 3:
-                    return {
-                        text: "Меня уже пиздят палками",
-                        color: "#E56C6C",
-                    };
-            }
+            const PRIORITY_LOW = 1;
+            const PRIORITY_MID = 2;
+            const PRIORITY_HIGH = 3;
+            const priorities = {
+                [PRIORITY_LOW]: {
+                    text: "Подождёт до завтра",
+                    color: "#09B378",
+                },
+                [PRIORITY_MID]: {
+                    text: "Пора бы начинать делать",
+                    color: "#FB992E",
+                },
+                [PRIORITY_HIGH]: {
+                    text: "Меня уже пиздят палками",
+                    color: "#E56C6C",
+                },
+            };
+            return priorities[index] || priorities[PRIORITY_MID];
         },
         setTasks() {
             for (const key in localStorage) {
@@ -110,12 +111,19 @@ const todo = (function () {
         },
         renderAll() {
             tasks.forEach(({ date, text, priority }) => {
-                taskList.insertAdjacentHTML("beforeend",
-                    `<li data-index=${date} style="background-color: ${this.priorityName(priority).color}">
+                taskList.insertAdjacentHTML(
+                    "beforeend",
+                    `<li data-index=${date} style="background-color: ${
+                        this.priorityName(priority).color
+                    }">
                         <div class="task">
                             <div class="status-line">
-                                <span class="date">${new Date(date).toLocaleString()}</span>
-                                <span class="status">${this.priorityName(priority).text}</span>
+                                <span class="date">${new Date(
+                                    date
+                                ).toLocaleString()}</span>
+                                <span class="status">${
+                                    this.priorityName(priority).text
+                                }</span>
                             </div>
                             <div class="text">
                                 ${text}
@@ -129,12 +137,17 @@ const todo = (function () {
             });
         },
         renderTask({ date, text, priority }) {
-            taskList.insertAdjacentHTML("beforeend",
+            taskList.insertAdjacentHTML(
+                "beforeend",
                 `<li data-index=${date} style="background-color: ${this.priorityName(priority).color}">
 					<div class="task">
                         <div class="status-line">
-                            <span class="date">"${new Date(date).toLocaleString()}</span>
-                            <span class="status">${this.priorityName(priority).text}</span>
+                            <span class="date">"
+                                ${new Date(date).toLocaleString()}
+                            </span>
+                            <span class="status">
+                                ${this.priorityName(priority).text}
+                            </span>
                         </div>
                         <div class="text">
                             ${text}
