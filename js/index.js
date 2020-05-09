@@ -17,12 +17,11 @@ const storage = (function () {
             }
         },
         deleteTask(date) {
-            tasks = tasks.filter((task) => { 
-                return task.date !== date 
+            tasks = tasks.filter((task) => {
+                return task.date !== Number(date);
             });
-            console.log(tasks)
             this.setToLocalStorage();
-            // console.log(localStorage.tasks);
+            return tasks;
         },
     };
 })();
@@ -34,7 +33,7 @@ const todo = (function () {
     const taskList = document.querySelector(".task-list");
     const prioritySort = document.querySelector(".priority-sort");
     const dateSort = document.querySelector(".date-sort");
-    let tasks = storage.getTasks() || [];
+    let tasks = storage.getTasks();
     let toHigh = false;
     let toNew = false;
 
@@ -46,11 +45,11 @@ const todo = (function () {
                 `li[data-date=${CSS.escape(e.target.dataset.date)}]`
             );
 
-            deletedElement.style.transform = "translateX(-200%)";
+            deletedElement.style.transform = "scale(0)";
             setTimeout(() => {
                 deletedElement.remove();
-                storage.deleteTask(e.target.dataset.date);
-            }, 300);
+                tasks = storage.deleteTask(e.target.dataset.date);
+            }, 250);
         }
     });
 
@@ -100,15 +99,15 @@ const todo = (function () {
             const priorities = {
                 [PRIORITY_LOW]: {
                     text: "Подождёт до завтра",
-                    color: "#09B378",
+                    color: "#d3c279",
                 },
                 [PRIORITY_MID]: {
                     text: "Пора бы начинать делать",
-                    color: "#FB992E",
+                    color: "#ee9459",
                 },
                 [PRIORITY_HIGH]: {
                     text: "Меня уже пиздят палками",
-                    color: "#E56C6C",
+                    color: "#e44646",
                 },
             };
             return priorities[index] || priorities[PRIORITY_MID];
@@ -126,7 +125,7 @@ const todo = (function () {
                 }">
 					<div class="task">
                         <div class="status-line">
-                            <span class="date">"
+                            <span class="date">
                                 ${new Date(date).toLocaleString()}
                             </span>
                             <span class="status">
@@ -156,10 +155,10 @@ const todo = (function () {
         prioritySort() {
             taskList.innerHTML = "";
             if (toHigh) {
-                tasks.sort((a, b) => a.priority - b.priority);
+                tasks.sort((a, b) => a.priorityIndex - b.priorityIndex);
                 toHigh = false;
             } else {
-                tasks.sort((a, b) => b.priority - a.priority);
+                tasks.sort((a, b) => b.priorityIndex - a.priorityIndex);
                 toHigh = true;
             }
             this.renderAll();
@@ -181,5 +180,4 @@ const todo = (function () {
     };
 })();
 
-// todo.setTasks();
 todo.renderAll();
