@@ -34,21 +34,20 @@ const todo = (function () {
     const prioritySort = document.querySelector(".priority-sort");
     const dateSort = document.querySelector(".date-sort");
     let tasks = storage.getTasks();
+    let tasksWithTemplate = [];
     let toHigh = false;
-    let toNew = false;
+    let toNew = true;
 
     // remove task
 
     taskList.addEventListener("click", (e) => {
         if (e.target.dataset.date) {
-            const deletedElement = document.querySelector(
-                `li[data-date=${CSS.escape(e.target.dataset.date)}]`
-            );
-
+            const deletedElement = document.querySelector(`li[data-date=${CSS.escape(e.target.dataset.date)}]`);
             deletedElement.style.transform = "scale(0)";
+            tasks = storage.deleteTask(e.target.dataset.date);
+            console.log(tasks)
             setTimeout(() => {
                 deletedElement.remove();
-                tasks = storage.deleteTask(e.target.dataset.date);
             }, 250);
         }
     });
@@ -112,45 +111,46 @@ const todo = (function () {
             };
             return priorities[index] || priorities[PRIORITY_MID];
         },
+        useTemplate() {
+            tasksWithTemplate = [];
+            
+            return tasks.forEach((task) => {
+                tasksWithTemplate.push(this.template(task));
+            });
+        },
         renderAll() {
-            tasks.forEach((task) => {
-                return this.renderTask(task);
+            this.useTemplate();
+
+            let content = "";
+
+            tasksWithTemplate.forEach((task) => {
+                content += task;
             });
+            console.log(content)
+            taskList.insertAdjacentHTML("beforeend", content);
         },
-        renderTask({ date, text, priorityIndex }) {
-            taskList.insertAdjacentHTML(
-                "beforeend",
-                `<li data-date=${date} style="background-color: ${
-                    this.priorityName(priorityIndex).color
-                }">
-					<div class="task">
-                        <div class="status-line">
-                            <span class="date">
-                                ${new Date(date).toLocaleString()}
-                            </span>
-                            <span class="status">
-                                ${this.priorityName(priority).text}
-                            </span>
-                        </div>
-                        <div class="text">
-                            ${text}
-                        </div>
-                        <div class="actions">
-                            <button class="finish-task" data-date=${date}>Завершить</button>
-                        </div>
+        template({ date, text, priorityIndex }) {
+            return `<li data-date=${date} style="background-color: ${this.priorityName(priorityIndex).color}">
+                <div class="task">
+                    <div class="status-line">
+                        <span class="date">
+                            ${new Date(date).toLocaleString()}
+                        </span>
+                        <span class="status">
+                            ${this.priorityName(priority).text}
+                        </span>
                     </div>
-			    </li>`
-            );
+                    <div class="text">
+                        ${text}
+                    </div>
+                    <div class="actions">
+                        <button class="finish-task" data-date=${date}>Завершить</button>
+                    </div>
+                </div>
+            </li>`;
         },
-        deleteTask(id) {
-            let i;
-            tasks.forEach((element, index) => {
-                if (element.date === id) {
-                    i = index;
-                }
-            });
-            tasks.splice(i, 1);
-            localStorage.removeItem(id);
+        renderTask(task) {
+            taskList.insertAdjacentHTML("beforeend", this.template(task));
         },
         prioritySort() {
             taskList.innerHTML = "";
@@ -167,7 +167,7 @@ const todo = (function () {
             taskList.innerHTML = "";
             if (toNew) {
                 tasks.sort((a, b) => a.date - b.date);
-                toNew = false;
+                toNew = false; 
             } else {
                 tasks.sort((a, b) => b.date - a.date);
                 toNew = true;
@@ -179,5 +179,4 @@ const todo = (function () {
         },
     };
 })();
-
 todo.renderAll();
