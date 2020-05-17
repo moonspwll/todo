@@ -27,6 +27,7 @@ const storage = (function () {
 })();
 
 const todo = (function () {
+    const form = document.querySelector(".input-form");
     const addTaskButton = document.querySelector(".add-task_button");
     const input = document.querySelector(".task-text");
     const prioritySelect = document.querySelector(".priority");
@@ -61,7 +62,7 @@ const todo = (function () {
                 text: input.value,
                 priorityIndex: prioritySelect.selectedIndex + 1,
             });
-            input.value = "";
+            form.reset();
         }
     });
 
@@ -116,7 +117,7 @@ const todo = (function () {
             });
         },
         renderAll() {
-            const content = (this.useTemplate.length > 0) ? this.useTemplate().reduce((acc, curr) => acc + curr) : [];
+            const content = (this.useTemplate().length > 0) ? this.useTemplate().reduce((acc, curr) => acc + curr) : [];
             taskList.insertAdjacentHTML("beforeend", content);
         },
         template({ date, text, priorityIndex }) {
