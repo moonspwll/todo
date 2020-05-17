@@ -34,7 +34,6 @@ const todo = (function () {
     const prioritySort = document.querySelector(".priority-sort");
     const dateSort = document.querySelector(".date-sort");
     let tasks = storage.getTasks();
-    let tasksWithTemplate = [];
     let toHigh = false;
     let toNew = true;
 
