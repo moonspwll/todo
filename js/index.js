@@ -116,7 +116,7 @@ const todo = (function () {
             });
         },
         renderAll() {
-            const content = this.useTemplate().reduce((acc, curr) => acc + curr);
+            const content = (this.useTemplate.length > 0) ? this.useTemplate().reduce((acc, curr) => acc + curr) : [];
             taskList.insertAdjacentHTML("beforeend", content);
         },
         template({ date, text, priorityIndex }) {
