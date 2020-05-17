@@ -45,7 +45,7 @@ const todo = (function () {
             const deletedElement = document.querySelector(`li[data-date=${CSS.escape(e.target.dataset.date)}]`);
             deletedElement.style.transform = "scale(0)";
             tasks = storage.deleteTask(e.target.dataset.date);
-            console.log(tasks)
+            console.log(tasks);
             setTimeout(() => {
                 deletedElement.remove();
             }, 250);
@@ -112,21 +112,12 @@ const todo = (function () {
             return priorities[index] || priorities[PRIORITY_MID];
         },
         useTemplate() {
-            tasksWithTemplate = [];
-            
-            return tasks.forEach((task) => {
-                tasksWithTemplate.push(this.template(task));
+            return tasks.map((task) => {
+                return this.template(task);
             });
         },
         renderAll() {
-            this.useTemplate();
-
-            let content = "";
-
-            tasksWithTemplate.forEach((task) => {
-                content += task;
-            });
-            console.log(content)
+            const content = this.useTemplate().reduce((acc, curr) => acc + curr);
             taskList.insertAdjacentHTML("beforeend", content);
         },
         template({ date, text, priorityIndex }) {
@@ -167,7 +158,7 @@ const todo = (function () {
             taskList.innerHTML = "";
             if (toNew) {
                 tasks.sort((a, b) => a.date - b.date);
-                toNew = false; 
+                toNew = false;
             } else {
                 tasks.sort((a, b) => b.date - a.date);
                 toNew = true;
